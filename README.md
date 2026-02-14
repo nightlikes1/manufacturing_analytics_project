@@ -71,15 +71,18 @@ Eğer Docker kullanmadan, yerel Python ortamında çalıştırmak isterseniz:
 ## 📊 Ekran Görüntüleri
 
 ### 1. Canlı İzleme Paneli
-*(Buraya dashboard ekran görüntüsü eklenecek)*
+<img width="1903" height="929" alt="Ekran görüntüsü 2026-02-14 163609" src="https://github.com/user-attachments/assets/7c5fe3ee-d975-4ac9-acbc-e3ec88fe1814" />
+
 > Anlık sensör verileri, risk durumu ve makine sağlığı grafiği.
 
 ### 2. XAI (SHAP) Analizi
-*(Buraya waterfall grafiği ekran görüntüsü eklenecek)*
+<img width="1603" height="693" alt="Ekran görüntüsü 2026-02-14 163624" src="https://github.com/user-attachments/assets/b1e50b76-eb64-4950-8d2e-d1064b6659ce" />
+
 > Modelin neden "Arıza Riski" uyarısı verdiğini gösteren detaylı analiz.
 
 ### 3. Geçmiş Raporlar
-*(Buraya veritabanı geçmişi ekran görüntüsü eklenecek)*
+<img width="1550" height="571" alt="Ekran görüntüsü 2026-02-14 163538" src="https://github.com/user-attachments/assets/9294f941-5fe1-4e1b-8c16-2ff47ea8eb9f" />
+
 > Zaman içindeki risk değişimini gösteren trend grafiği ve veri tablosu.
 
 ## 🧪 Testleri Çalıştırma
