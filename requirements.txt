@@ -1,0 +1,9 @@
+polars
+pandas
+numpy
+scikit-learn
+plotly
+seaborn
+matplotlib
+requests
+pyarrow
