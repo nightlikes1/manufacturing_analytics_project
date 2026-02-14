@@ -1,32 +1,95 @@
-# 🏭 Endüstriyel Kestirimci Bakım ve Makine Arıza Tahmini
+# 🏭 Manufacturing Analytics Project: AI-Powered Predictive Maintenance
 
-Bu proje, üretim hattındaki makinelerden gelen sensör verilerini kullanarak olası arızaları önceden tahmin eden uçtan uca bir **Veri Bilimi ve Makine Öğrenmesi** çözümüdür. Proje, veri çekme aşamasından Docker ile dağıtım (deployment) aşamasına kadar tüm modern veri hatlarını (pipeline) kapsar.
+[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.27-red)](https://streamlit.io/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.103-green)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-blue)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)](https://www.postgresql.org/)
 
-## 🚀 Öne Çıkan Özellikler
-- **Yüksek Performanslı ETL:** Geleneksel Pandas yerine Rust tabanlı **Polars** kütüphanesi kullanılarak optimize edilmiş veri işleme.
-- **Gelişmiş Modelleme:** Random Forest algoritması ile arızaları **%82 Recall** oranıyla tespit etme.
-- **İnteraktif Analitik:** Plotly ile hazırlanan, kritik tork ve devir sınırlarını gösteren dinamik dashboard.
-- **Konteynerizasyon:** Her bilgisayarda aynı şekilde çalışması için **Docker** entegrasyonu.
+**Endüstriyel Kestirimci Bakım (Predictive Maintenance)** için geliştirilmiş, uçtan uca, canlı veri simülasyonlu ve açıklanabilir yapay zeka (XAI) destekli tam teşekküllü bir sistemdir.
 
-## 🛠️ Kullanılan Teknolojiler
-- **Dil:** Python 3.11
-- **Veri İşleme:** Polars, NumPy, PyArrow
-- **Makine Öğrenmesi:** Scikit-Learn
-- **Görselleştirme:** Plotly, Seaborn, Matplotlib
-- **Dağıtım:** Docker
+## 🌟 Öne Çıkan Özellikler
 
-## 📈 İş İçgörüleri (Insights)
-Analizler sonucunda elde edilen kritik bulgular:
-1. **Kritik Tork Sınırı:** Tork değerinin 60 Nm üzerine çıktığı durumlarda arıza riskinin %40 arttığı gözlemlendi.
-2. **RPM ve Tork İlişkisi:** Arızaların büyük çoğunluğu düşük devir (RPM) ve yüksek tork kombinasyonunda gerçekleşiyor.
-3. **Güç Faktörü:** Yeni türetilen `power_factor` değişkeni, arıza tahmininde en güçlü belirleyicilerden biri oldu.
+Bu proje, bir "Hobi" uygulamasından öte, **Kurumsal (Enterprise-Ready)** bir çözüm mimarisine sahiptir:
 
-## 🐳 Docker ile Çalıştırma
-Projeyi bağımlılıklarla uğraşmadan çalıştırmak için:
+- **📡 Canlı İzleme & Simülasyon:** Gerçek zamanlı sensör verisi üreten simülatör ve anlık dashboard.
+- **🧠 AutoML & Optuna:** Model hiperparametrelerini (ağaç derinliği, vb.) otomatik optimize eden akıllı eğitim süreci.
+- **🔍 Açıklanabilir Yapay Zeka (XAI):** `SHAP` ile model kararlarının ("Neden Arıza Riski?") grafiksel izahı.
+- **🗄️ Güçlü Hafıza (PostgreSQL):** Tüm tahminlerin ve sensör verilerinin kalıcı olarak saklandığı ilişkisel veritabanı.
+- **📈 MLflow Takip Sistemi:** Her eğitimin performansını (Accuracy, F1 Score) kaydeden ve versiyonlayan MLOps altyapısı.
+- **🐳 Tam Konteynerizasyon (Docker):** Tek komutla (`docker-compose up`) tüm sistemi (Dashboard + API + DB) ayağa kaldırma.
+- **✅ Otomatik Testler:** Kod güvenilirliğini sağlayan `pytest` entegrasyonu.
+
+## 🏗️ Sistem Mimarisi
+
+```mermaid
+graph TD
+    A[🏭 Sensör Simülatörü] -->|Canlı Veri| B(🚀 FastAPI Model Servisi)
+    A -->|Canlı Veri| C(📊 Streamlit Dashboard)
+    B -->|Tahmin Sonucu| D[(🐘 PostgreSQL Veritabanı)]
+    C -->|Tahmin İsteği| B
+    B -->|XAI & Risk Skoru| C
+    E[🧠 AutoML Training] -->|Model Dosyası| B
+    E -->|Metrikler| F[📈 MLflow Server]
+```
+
+## 🚀 Hızlı Başlangıç (Docker ile Kurulum)
+
+Bilgisayarınızda **Docker Desktop** yüklü ise, projeyi çalıştırmak sadece 1 satır kod:
 
 ```bash
-# 1. İmajı oluşturun
-docker build -t uretim-analiz-app .
+docker-compose up --build
+```
 
-# 2. Konteyneri çalıştırın
-docker run --name aktif-analiz uretim-analiz-app
+Bu komut tamamlandığında şu hizmetler aktif olacaktır:
+- **Dashboard:** [http://localhost:8501](http://localhost:8501) (Kullanıcı Arayüzü)
+- **API Docs:** [http://localhost:8000/docs](http://localhost:8000/docs) (Swagger UI)
+- **Veritabanı:** `localhost:5432` (PostgreSQL)
+
+## 💻 Manuel Kurulum (Geliştirici Modu)
+
+Eğer Docker kullanmadan, yerel Python ortamında çalıştırmak isterseniz:
+
+1. **Bağımlılıkları Yükleyin:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Veri Hazırlığı & Model Eğitimi:**
+   ```bash
+   python 01_ingestion.py          # Veriyi indir
+   python 02_analysis_and_features.py # İşle
+   python 03_machine_learning.py   # Modeli eğit (AutoML + MLflow)
+   ```
+
+3. **Uygulamayı Başlatın:**
+   ```bash
+   streamlit run 05_app.py
+   ```
+   *(Not: Manuel modda PostgreSQL yerine SQLite veya mock veri kullanılabilir, ancak tam özellikler için Docker önerilir.)*
+
+## 📊 Ekran Görüntüleri
+
+### 1. Canlı İzleme Paneli
+*(Buraya dashboard ekran görüntüsü eklenecek)*
+> Anlık sensör verileri, risk durumu ve makine sağlığı grafiği.
+
+### 2. XAI (SHAP) Analizi
+*(Buraya waterfall grafiği ekran görüntüsü eklenecek)*
+> Modelin neden "Arıza Riski" uyarısı verdiğini gösteren detaylı analiz.
+
+### 3. Geçmiş Raporlar
+*(Buraya veritabanı geçmişi ekran görüntüsü eklenecek)*
+> Zaman içindeki risk değişimini gösteren trend grafiği ve veri tablosu.
+
+## 🧪 Testleri Çalıştırma
+
+Kodun sağlamlığını kontrol etmek için:
+
+```bash
+python -m pytest tests/
+```
+
+---
+**License:** MIT
+**Developer:** [Hasan Yiğit Doğanay]

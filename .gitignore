@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.venv
+.env
+.ipynb_checkpoints/
+.vscode/
+
+# Data & Outputs
+data/
+outputs/
+mlruns/
+postgres_data/
+
+# Database (Local SQLite)
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db

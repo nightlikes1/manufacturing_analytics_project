@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Streamlit Dashboard Servisi
+  dashboard:
+    build: .
+    container_name: factory_dashboard
+    command: streamlit run 05_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app  # Kod değişikliği anında yansısın (Hot Reload)
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=db
+      - DB_NAME=manufacturing_db
+      - DB_USER=admin
+      - DB_PASS=secret123
+    depends_on:
+      - db
+
+  # FastAPI Modeli Servisi
+  api:
+    build: .
+    container_name: factory_api
+    command: uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=db
+      - DB_NAME=manufacturing_db
+      - DB_USER=admin
+      - DB_PASS=secret123
+    depends_on:
+      - db
+
+  # PostgreSQL Veritabanı
+  db:
+    image: postgres:15-alpine
+    container_name: factory_db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret123
+      - POSTGRES_DB=manufacturing_db
+    ports:
+      - "5432:5432" # Dışarıdan erişmek istersen
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

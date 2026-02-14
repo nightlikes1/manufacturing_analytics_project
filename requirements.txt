@@ -7,3 +7,14 @@ seaborn
 matplotlib
 requests
 pyarrow
+pyyaml
+streamlit
+fastapi
+uvicorn
+shap
+matplotlib
+optuna
+mlflow
+pytest
+httpx
+psycopg2-binary

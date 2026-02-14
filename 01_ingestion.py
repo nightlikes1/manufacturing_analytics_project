@@ -1,35 +1,54 @@
 import polars as pl
-import os
+from src.utils import load_config, get_logger
+from src.data import ingest_data
 
-def veriyi_indir_ve_hazirla():
-    # Klasörleri oluştur (Düzenli çalışmak profesyonelliktir)
-    os.makedirs("data/raw", exist_ok=True)
+def main():
+    logger = get_logger("Ingestion")
+    config = load_config()
     
-    print("🚀 Gerçek dünya üretim verisi indiriliyor...")
+    url = config["data"]["raw_url"]
+    save_path = config["data"]["raw_path"]
     
-    # UCI Machine Learning Repository - Predictive Maintenance Dataset
-    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv"
+    logger.info("Starting Data Ingestion...")
     
-    # Polars ile veriyi oku
-    df = pl.read_csv(url)
+    # Ingest data (download or load)
+    df = ingest_data(url, save_path)
     
-    # Sütun isimlerini daha profesyonel hale getirelim
-    df = df.rename({
-        "UDI": "id",
-        "Air temperature [K]": "air_temp",
-        "Process temperature [K]": "process_temp",
-        "Rotational speed [rpm]": "rpm",
-        "Torque [Nm]": "torque",
-        "Tool wear [min]": "tool_wear",
-        "Machine failure": "target"
-    })
+    # Renaming logic - kept here as part of "raw" preparation or could be moved to src/data.py
+    # Since the original script did it, let's keep it consistent but clean.
+    # Actually, let's check if ingest_data did it? No, ingest_data just returned raw read.
+    # So we apply renaming here before "finalizing" the raw step or update ingest_data?
+    # Better: Update ingest_data to optionally rename or do it here. 
+    # Let's do it here to keep business logic visible but use method chaining.
     
-    # Veriyi kaydet
-    df.write_csv("data/raw/sensor_data.csv")
+    # Renaming logic - only if raw columns exist
+    if "UDI" in df.columns:
+        logger.info("Renaming columns...")
+        df = df.rename({
+            "UDI": "id",
+            "Air temperature [K]": "air_temp",
+            "Process temperature [K]": "process_temp",
+            "Rotational speed [rpm]": "rpm",
+            "Torque [Nm]": "torque",
+            "Tool wear [min]": "tool_wear",
+            "Machine failure": "target"
+        })
+    else:
+        logger.info("Columns already renamed or not found.")
     
-    print("✅ Başarılı! Veri seti 'data/raw/sensor_data.csv' konumuna kaydedildi.")
-    print(f"📊 Toplam Satır Sayısı: {df.height}")
-    print(df.head(3))
+    # Save again if we modified it? 
+    # Original script: read -> rename -> save.
+    # My ingest_data: read -> save -> return. 
+    # If I rename AFTER ingest_data, the saved file in ingest_data is the ORIGINAL raw with old names.
+    # But 02 script expects new names.
+    # So I should overwrite the file with renamed columns or change ingest_data to handle renaming.
+    # Let's overwrite here for simplicity and to match the flow "Raw -> Clean Raw".
+    
+    df.write_csv(save_path)
+    logger.info(f"Data renamed and saved again to {save_path}")
+    
+    logger.info(f"Total Rows: {df.height}")
+    logger.info(f"\n{df.head(3)}")
 
 if __name__ == "__main__":
-    veriyi_indir_ve_hazirla()
+    main()

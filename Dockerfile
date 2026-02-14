@@ -16,6 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Tüm proje dosyalarını kopyalıyoruz
 COPY . .
 
-# 6. Konteyner başladığında çalışacak komutu belirliyoruz 
-# (Önce dashboard'u oluştursun sonra çalışmaya devam etsin)
-CMD ["python", "04_dashboard_summary.py"]
+# 6. Portları açıyoruz
+EXPOSE 8501
+EXPOSE 8000
+
+# 7. Varsayılan çalışma komutu (İstersek docker-compose ile ezeriz)
+CMD ["streamlit", "run", "05_app.py", "--server.port=8501", "--server.address=0.0.0.0"]

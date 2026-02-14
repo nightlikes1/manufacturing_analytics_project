@@ -1,0 +1,27 @@
+base:
+  random_state: 42
+  test_size: 0.2
+
+data:
+  raw_url: "https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv"
+  raw_path: "data/raw/sensor_data.csv"
+  processed_path: "data/processed/refined_sensor_data.csv"
+
+features:
+  numerical:
+    - "air_temp_c"
+    - "process_temp_c"
+    - "rpm"
+    - "torque"
+    - "tool_wear"
+    - "power_factor"
+    - "temp_diff"
+  target: "target"
+
+model:
+  path: "src/models/maintenance_model.pkl"
+  n_estimators: 100
+
+reports:
+  correlation_plot: "outputs/correlation_analysis.png"
+  dashboard_html: "outputs/production_dashboard.html"
